@@ -43,6 +43,14 @@ export function ContactPage() {
     }));
   };
 
+  const sendEmail = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const subject = `Enquiry from ${formData.name || 'Website Visitor'}`;
+    const body = `Name: ${formData.name}\nEmail: ${formData.email}\nPhone: ${formData.phone}\n\nMessage:\n${formData.message}`;
+    const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+  };
+
   return (
     <div className="min-h-screen bg-[#E3F2FD] pt-24 sm:pt-28 md:pt-32 pb-12 sm:pb-16 md:pb-20 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
@@ -209,31 +217,44 @@ export function ContactPage() {
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full px-6 sm:px-8 py-3 sm:py-4 bg-[#2196F3] text-white rounded-lg hover:bg-[#1976D2] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
-                  aria-label="Send message"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                      Sending...
-                    </>
-                  ) : submitStatus === 'success' ? (
-                    <>
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                      Sent Successfully!
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-4 h-4 sm:w-5 sm:h-5" />
-                      Send Message
-                    </>
-                  )}
-                </button>
+                <div className="flex flex-col sm:flex-row gap-3">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="flex-1 px-6 sm:px-8 py-3 sm:py-4 bg-[#2196F3] text-white rounded-lg hover:bg-[#1976D2] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                    aria-label="Send message"
+                  >
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                        Sending...
+                      </>
+                    ) : submitStatus === 'success' ? (
+                      <>
+                        <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        Sent Successfully!
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-4 h-4 sm:w-5 sm:h-5" />
+                        Send Message
+                      </>
+                    )}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={sendEmail}
+                    disabled={isSubmitting}
+                    className="flex-1 px-6 sm:px-8 py-3 sm:py-4 bg-white text-[#1E3A8A] border border-gray-300 rounded-lg hover:bg-[#F5F8FF] transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+                    aria-label="Send email"
+                  >
+                    <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-[#2196F3]" />
+                    Send Email
+                  </button>
+                </div>
 
                 {submitStatus === 'success' && (
                   <p className="text-center text-[#25D366] text-sm sm:text-base">
