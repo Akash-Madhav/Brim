@@ -1,6 +1,13 @@
 import { motion } from "motion/react";
 import { Battery, Calendar, Maximize2 } from "lucide-react";
 import { useState, useEffect } from "react";
+import led_clock_product1a from "../../assets/led_clock_product1a.jpeg";
+import led_clock_product1b from "../../assets/led_clock_product1b.jpeg";
+import led_clock_product2a from "../../assets/led_clock_product2a.jpeg";
+import led_clock_product2c from "../../assets/led_clock_product2c.jpeg";
+import led_clock_product3a from "../../assets/led_clock_product3a.jpeg";
+import led_clock_product3b from "../../assets/led_clock_product3b.jpeg";
+import led_clock_product3c from "../../assets/led_clock_product3c.jpeg";
 
 const products = [
   {
@@ -15,8 +22,8 @@ const products = [
     size: "Compact size: 14 cm (L) x 6.5 cm (H) x 3.5 cm (W)",
     scale: "small",
     images: [
-      "https://www.brimclocks.com/images/products/led_clock_product1a.jpeg",
-      "https://www.brimclocks.com/images/products/led_clock_product1b.jpeg",
+      led_clock_product1a,
+      led_clock_product1b,
     ],
   },
   {
@@ -31,8 +38,8 @@ const products = [
     size: "Large size: 90 cm (L) x 30 cm (H)",
     scale: "large",
     images: [
-      "https://www.brimclocks.com/images/products/led_clock_product2a.jpeg",
-      "https://www.brimclocks.com/images/products/led_clock_product2c.jpeg",
+      led_clock_product2a,
+      led_clock_product2c,
     ],
   },
   {
@@ -47,9 +54,9 @@ const products = [
     size: "Compact size: 26 cm (L) x 8 cm (H)",
     scale: "small",
     images: [
-      "https://www.brimclocks.com/images/products/led_clock_product3a.jpeg",
-      "https://www.brimclocks.com/images/products/led_clock_product3c.jpeg",
-      "https://www.brimclocks.com/images/products/led_clock_product3b.jpeg",
+      led_clock_product3a,
+      led_clock_product3c,
+      led_clock_product3b,
     ],
   },
 ];

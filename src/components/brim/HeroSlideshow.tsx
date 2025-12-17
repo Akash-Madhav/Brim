@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import miniClockImg from "../../images/mini-clock.png";
-import jumboClockImg from "../../images/jumbo-clock.png";
-import calendarClockImg from "../../images/calendar-clock.png";
+import miniClockImg from "../../assets/mini_LED_ss.jpeg";
+import jumboClockImg from "../../assets/Jumbo_LED_ss.jpeg";
+import calendarClockImg from "../../assets/cal_ss.jpeg";
 
 const products = [
   {
