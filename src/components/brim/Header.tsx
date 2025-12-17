@@ -1,5 +1,5 @@
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface HeaderProps {
   currentPage: "home" | "contact";
@@ -11,6 +11,7 @@ export function Header({
   onNavigate,
 }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   const handleNavClick = (
     page: "home" | "contact",
@@ -30,18 +31,38 @@ export function Header({
     }
   };
 
+  // toggle scrolled state to create a merging/compact header effect
+  useEffect(() => {
+    const onScroll = () => {
+      setScrolled(window.scrollY > 24);
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
+    <header id="site-header" className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-sm transition-colors duration-300 ease-in-out">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
+        <div
+          className={`flex items-center justify-between transition-all duration-300 ease-in-out ${
+            scrolled ? "h-[72px] sm:h-[80px]" : "h-[80px] sm:h-[88px]"
+          }`}
+          role="banner"
+        >
           {/* Logo/Brand */}
           <button
             onClick={() => handleNavClick("home")}
-            className="transition-opacity hover:opacity-80"
+            className="transition-opacity hover:opacity-80 flex-shrink-0"
             style={{ fontFamily: "Aerial", fontWeight: "bold" }}
             aria-label="Brim Clocks Home"
           >
-            <span className="text-xl sm:text-2xl text-[#1E3A8A]">
+            <span
+              className={`text-[#1E3A8A] transition-all duration-300 ease-in-out ${
+                    scrolled ? "text-base sm:text-lg" : "text-lg sm:text-xl"
+              }`}
+            >
               BRIM
             </span>
           </button>

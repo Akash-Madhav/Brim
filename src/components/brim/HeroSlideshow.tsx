@@ -5,33 +5,77 @@ import jumboClockImg from "../../assets/Jumbo_LED_ss.jpeg";
 import calendarClockImg from "../../assets/cal_ss.jpeg";
 
 const products = [
-  {
-    name: "Mini LED Clock",
-    image: miniClockImg,
-  },
-  {
-    name: "Jumbo LED Clock",
-    image: jumboClockImg,
-  },
-  {
-    name: "Calendar Clock",
-    image: calendarClockImg,
-  },
+  { name: "Mini LED Clock", image: miniClockImg },
+  { name: "Jumbo LED Clock", image: jumboClockImg },
+  { name: "Calendar Clock", image: calendarClockImg },
 ];
 
 export function HeroSlideshow() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [heightPx, setHeightPx] = useState<number>(0);
+  const [headerHeight, setHeaderHeight] = useState<number>(0);
+  const [isDesktop, setIsDesktop] = useState<boolean>(false);
+  const TOP_OFFSET = 0;
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % products.length);
     }, 4000);
-
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    const update = () => {
+      const vw = window.innerWidth;
+      const vh = window.innerHeight;
+
+      let ratio;
+      if (vw < 640) {
+        ratio = 0.6; // phones
+        setIsDesktop(false);
+      } else if (vw < 1024) {
+        ratio = 0.45; // tablets
+        setIsDesktop(false);
+      } else {
+        ratio = 0.42; // desktops → adjusted for better fit
+        setIsDesktop(true);
+      }
+
+      const h = Math.min(vh, Math.max(320, Math.round(vw * ratio)));
+      setHeightPx(h);
+
+      const hdr = document.getElementById("site-header");
+      setHeaderHeight(hdr ? hdr.offsetHeight : 0);
+    };
+
+    update();
+    let t: number | null = null;
+    const onResize = () => {
+      if (t) window.clearTimeout(t);
+      t = window.setTimeout(() => {
+        update();
+        t = null;
+      }, 120);
+    };
+
+    window.addEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+    };
+  }, []);
+
   return (
-    <div className="relative h-[60vh] min-h-[400px] sm:h-[65vh] md:h-[70vh] lg:h-[75vh] mt-20 overflow-hidden">
+    <div
+      className="relative w-full overflow-hidden"
+      style={{
+        height: heightPx ? `${heightPx}px` : undefined,
+        minHeight: 320,
+        marginTop: headerHeight ? `${headerHeight + TOP_OFFSET}px` : undefined,
+        transition: "height 0.3s ease",
+      }}
+    >
       <AnimatePresence mode="wait">
         <motion.div
           key={currentSlide}
@@ -39,14 +83,18 @@ export function HeroSlideshow() {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
           transition={{ duration: 1.2, ease: "easeInOut" }}
-          className="absolute inset-0"
+          className="relative h-full"
         >
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-[#E3F2FD] z-10" />
           <img
             src={products[currentSlide].image}
             alt={`${products[currentSlide].name} - Premium LED Digital Clock by Brim Clocks`}
-            className="w-full h-full object-cover"
+            className="w-full h-full"
             loading="eager"
+            style={{
+              objectPosition: "center",
+              objectFit: isDesktop ? "contain" : "cover", // contain on desktop, cover on mobile/tablet
+            }}
           />
 
           <div className="absolute bottom-0 left-0 right-0 z-20 p-4 sm:p-6 md:p-8 lg:p-12 xl:p-16">
@@ -65,8 +113,7 @@ export function HeroSlideshow() {
                 transition={{ delay: 0.5, duration: 0.8 }}
                 className="text-base sm:text-lg md:text-xl lg:text-2xl text-white"
               >
-                Trusted by Banks, Offices & Corporations
-                Nationwide
+                Trusted by Banks, Offices & Corporations Nationwide
               </motion.p>
             </div>
           </div>
@@ -79,10 +126,10 @@ export function HeroSlideshow() {
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`h-2 sm:h-3 rounded-full transition-all duration-300 ${
+            className={`rounded-full transition-all duration-300 ${
               index === currentSlide
-                ? "bg-white w-6 sm:w-8"
-                : "bg-white/40 hover:bg-white/60 w-2 sm:w-3"
+                ? "bg-white h-2 w-6 sm:h-3 sm:w-8"
+                : "bg-white/40 hover:bg-white/60 h-2 w-2 sm:h-3 sm:w-3"
             }`}
             aria-label={`View ${products[index].name}`}
           />
